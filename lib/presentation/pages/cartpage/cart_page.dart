@@ -24,6 +24,11 @@ class CartPage extends StatelessWidget {
                   return const CircularProgressIndicator();
                 }
                 if(state is CartLoaded){
+                  if(state.items.isEmpty){
+                    return const Center(
+                      child: Text("No Item in cart"),
+                    );
+                  }
                   return ListView.builder(
                     padding: const EdgeInsets.symmetric(vertical: 22),
                     itemCount: state.items.length,
