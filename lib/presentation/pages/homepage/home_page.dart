@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -120,11 +121,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                     msg = "${state.product?.itemName} is removed to cart";
                   }
 
-                  final snackBar = SnackBar(
-                    content: Text('Yay! $msg'),
-                  );
-                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Fluttertoast.cancel();
+                  Fluttertoast.showToast(msg: msg, gravity: ToastGravity.SNACKBAR,);
                 },
                 child: GridView.builder(
                     padding: const EdgeInsets.symmetric(vertical: 22),
