@@ -32,10 +32,10 @@ class CartBloc extends Bloc<CartEvent, CartState> with HydratedMixin{
               price: newItems[changedItemIndex].price,
               quantity: newItems[changedItemIndex].quantity + 1,
               image: newItems[changedItemIndex].image);
-          emit(CartLoaded(newItems, true, false, event.item));
+          emit(CartLoaded(newItems, true, false, event.item, state.totalPrice+event.item.price));
         } else {
           newItems.add(event.item);
-          emit(CartLoaded(newItems, true, false, event.item));
+          emit(CartLoaded(newItems, true, false, event.item, state.totalPrice+event.item.price));
         }
       }
     });
@@ -54,10 +54,10 @@ class CartBloc extends Bloc<CartEvent, CartState> with HydratedMixin{
               price: newItems[itemRequestForRemoveIndex].price,
               quantity: newItems[itemRequestForRemoveIndex].quantity - 1,
               image: newItems[itemRequestForRemoveIndex].image);
-          emit(CartLoaded(newItems, false, true, event.item));
+          emit(CartLoaded(newItems, false, true, event.item, state.totalPrice-event.item.price));
         } else {
           newItems.remove(event.item);
-          emit(CartLoaded(newItems, false, true, event.item));
+          emit(CartLoaded(newItems, false, true, event.item, state.totalPrice-event.item.price));
         }
       }
     });

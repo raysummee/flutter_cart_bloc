@@ -55,10 +55,20 @@ class CartPage extends StatelessWidget {
                                       state.items[index].itemName,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      softWrap: true,
+                                      style: const TextStyle(
+                                        color: Colors.purple,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 2,
                                     ),
                                     Text(
-                                      "\$ ${state.items[index].price}"
+                                      "\$ ${state.items[index].price}",
+                                      style: const TextStyle(
+                                        color: Colors.purple,
+                                        fontSize: 12
+                                      ),
                                     )
                                   ],
                                 ),
@@ -67,6 +77,7 @@ class CartPage extends StatelessWidget {
                                 onPressed: (){
                                   context.read<CartBloc>().add(ItemRemoved(state.items[index]));
                                 }, 
+                                color: Colors.purple,
                                 icon: const Icon(Icons.delete)
                               )
                             ],
@@ -80,6 +91,55 @@ class CartPage extends StatelessWidget {
                 return const SizedBox();
               },
             )
+          ),
+          Card(
+            margin: EdgeInsets.zero,
+            child: SafeArea(
+              top: false,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
+                width: double.infinity,
+                child: BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    if(state is CartLoaded){
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${state.items.length} items",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.purple
+                                ),
+                              ),
+                              Text(
+                                "Total price: \$ ${state.totalPrice}",
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.purple
+                                ),
+                              )
+                            ],
+                          ),
+                          IconButton(
+                            iconSize: 40,
+                            color: Colors.purple,
+                            onPressed: (){}, 
+                            icon: Icon(Icons.navigate_next)
+                          )
+                        ],
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+              ),
+            ),
           )
         ],
       ),

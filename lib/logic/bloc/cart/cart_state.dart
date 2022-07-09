@@ -20,7 +20,8 @@ class CartLoaded extends CartState {
   final ProductModel? product;
   final bool isAdded;
   final bool isRemoved;
-  CartLoaded([this.items = const [], this.isAdded=false, this.isRemoved = false, this.product]);
+  final double totalPrice;
+  CartLoaded([this.items = const [], this.isAdded=false, this.isRemoved = false, this.product, this.totalPrice=0]);
   
   @override
   List<Object?> get props => [items, product, isAdded, isRemoved];
