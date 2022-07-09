@@ -117,7 +117,7 @@ class CartPage extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "Total price: \$ ${state.totalPrice}",
+                                "Total price: \$ ${state.totalPrice.toStringAsFixed(2)}",
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
