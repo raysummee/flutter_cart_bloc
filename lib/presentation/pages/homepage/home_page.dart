@@ -13,12 +13,65 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
   @override
   void initState() {
     context.read<ProductsCubit>().productRequested();
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+      upperBound: 1,
+      lowerBound: 0,
+    );
     super.initState();
   }
+
+  late AnimationController animationController;
+
+  void animateCartAdd(BuildContext contextRenderBox, ImageProvider image){
+    var overlayEntry = OverlayEntry(
+      builder: (context) {
+        RenderBox? box = contextRenderBox.findRenderObject() as RenderBox?;
+        if(box!=null){
+          var startOffset = box.localToGlobal(Offset(-60+ MediaQuery.of(context).size.width/4, 60- MediaQuery.of(context).size.width/4));
+          var endOffset = Offset(MediaQuery.of(context).size.width, 0);
+
+          CurvedAnimation curvedAnimation = CurvedAnimation(parent: animationController, curve: Curves.easeInCubic);
+
+          var animatedOffset = Tween<Offset>(begin:startOffset, end: endOffset).animate(curvedAnimation);
+          animationController.reset();
+          animationController.animateTo(1);
+          return AnimatedBuilder(
+            animation: animationController,
+            builder: (_, child){
+              return Positioned(
+                top: animatedOffset.value.dy,
+                left: animatedOffset.value.dx,
+                child: child!
+              );
+            },
+            child: SizedBox(
+              width: -120 + MediaQuery.of(context).size.width/2,
+              height: -120 + MediaQuery.of(context).size.width/2,
+              child: Card(
+                elevation: 2,
+                color: Colors.grey.shade200,
+                child: Image(
+                  image: image,
+                ),
+              ),
+            )
+          );
+        }
+        return const SizedBox();
+      },
+    );
+    Overlay.of(contextRenderBox)?.insert(overlayEntry);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      overlayEntry.remove();
+    });
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -121,25 +174,31 @@ class _HomePageState extends State<HomePage> {
                                   }else{
                                     itemAddedToCart = false;
                                   }
-                                  return OutlinedButton(
-                                    onPressed: () {
-                                      if(itemAddedToCart){
-                                        context
-                                            .read<CartBloc>()
-                                            .add(ItemRemoved(state.products[index]));
-                                      }else{
-                                        context
-                                            .read<CartBloc>()
-                                            .add(ItemAdded(state.products[index]));
-                                      }
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      fixedSize: const Size.fromWidth(200),
-                                    ),
-                                    child: Text(
-                                      itemAddedToCart? "Remove": "Add",
-                                      style: const TextStyle(color: Colors.purple),
-                                    ));
+                                  return Builder(
+                                    builder: (contextRenderBox) {
+                                      return OutlinedButton(
+                                        onPressed: () {
+                                          if(itemAddedToCart){
+                                            context
+                                                .read<CartBloc>()
+                                                .add(ItemRemoved(state.products[index]));
+                                          }else{
+                                            context
+                                                .read<CartBloc>()
+                                                .add(ItemAdded(state.products[index]));
+                                            
+                                            animateCartAdd(contextRenderBox,  NetworkImage(state.products[index].image,),);
+                                          }
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          fixedSize: const Size.fromWidth(200),
+                                        ),
+                                        child: Text(
+                                          itemAddedToCart? "Remove": "Add",
+                                          style: const TextStyle(color: Colors.purple),
+                                        ));
+                                    }
+                                  );
                                 },
                               )
                             ],
