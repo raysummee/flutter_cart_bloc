@@ -2,17 +2,20 @@ import 'package:bloc/bloc.dart';
 import 'package:cart_bloc/data/models/product_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
 
-class CartBloc extends Bloc<CartEvent, CartState> {
+class CartBloc extends Bloc<CartEvent, CartState> with HydratedMixin{
   CartBloc() : super(CartInitial()) {
 
     on<CartStarted>((event, emit) {
-      emit(CartLoading());
-      emit(CartLoaded());
+      if(state is CartInitial){
+        emit(CartLoading());
+        emit(CartLoaded());
+      }
     });
 
     on<ItemAdded>((event, emit) {
@@ -58,5 +61,19 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         }
       }
     });
+  }
+  
+  @override
+  CartState? fromJson(Map<String, dynamic> json) {
+    return CartLoaded.fromMap(json);
+  }
+  
+  @override
+  Map<String, dynamic>? toJson(CartState state) {
+    if(state is CartLoaded){
+      print("saved");
+      return state.toMap();
+    }
+    return null;
   }
 }

@@ -6,10 +6,19 @@ import 'package:cart_bloc/presentation/pages/cartpage/cart_page.dart';
 import 'package:cart_bloc/presentation/pages/homepage/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart' as path;
 
-void main() {
-  BlocOverrides.runZoned(() => runApp(const MyApp()),
-      blocObserver: BlocObserverConsole());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final storage = await HydratedStorage.build(
+    storageDirectory: await path.getApplicationDocumentsDirectory(),
+  );
+  
+  HydratedBlocOverrides.runZoned(() => runApp(const MyApp()),
+      blocObserver: BlocObserverConsole(),
+      storage: storage,
+  );
 }
 
 class MyApp extends StatelessWidget {
