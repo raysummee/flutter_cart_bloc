@@ -24,7 +24,7 @@ class CartLoaded extends CartState {
   CartLoaded([this.items = const [], this.isAdded=false, this.isRemoved = false, this.product, this.totalPrice=0]);
   
   @override
-  List<Object?> get props => [items, product, isAdded, isRemoved];
+  List<Object?> get props => [items, product, isAdded, isRemoved, totalPrice];
 
 
   Map<String, dynamic> toMap() {
@@ -33,6 +33,7 @@ class CartLoaded extends CartState {
       'product': product?.toMap(),
       'isAdded': isAdded,
       'isRemoved': isRemoved,
+      'totalPrice': totalPrice
     };
   }
 
@@ -41,7 +42,8 @@ class CartLoaded extends CartState {
       (map['items'] as List).map((e) => ProductModel.fromMap(e)).toList(),
       map['isAdded'],
       map['isRemoved'],
-      ProductModel.fromMap(map['product'])
+      ProductModel.fromMap(map['product']),
+      map['totalPrice']
     );
   }
 }
