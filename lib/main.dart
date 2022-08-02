@@ -14,10 +14,11 @@ Future<void> main() async {
   final storage = await HydratedStorage.build(
     storageDirectory: await path.getApplicationDocumentsDirectory(),
   );
-  
-  HydratedBlocOverrides.runZoned(() => runApp(const MyApp()),
-      blocObserver: BlocObserverConsole(),
-      storage: storage,
+
+  HydratedBlocOverrides.runZoned(
+    () => runApp(const MyApp()),
+    blocObserver: BlocObserverConsole(),
+    storage: storage,
   );
 }
 
