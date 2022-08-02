@@ -1,13 +1,11 @@
 part of 'cart_bloc.dart';
 
 @immutable
-abstract class CartState extends Equatable{
-}
+abstract class CartState extends Equatable {}
 
 class CartInitial extends CartState {
   @override
   List<Object?> get props => [];
-
 }
 
 class CartLoading extends CartState {
@@ -21,11 +19,16 @@ class CartLoaded extends CartState {
   final bool isAdded;
   final bool isRemoved;
   final double totalPrice;
-  CartLoaded([this.items = const [], this.isAdded=false, this.isRemoved = false, this.product, this.totalPrice=0]);
-  
+  CartLoaded([
+    this.items = const [],
+    this.isAdded = false,
+    this.isRemoved = false,
+    this.product,
+    this.totalPrice = 0,
+  ]);
+
   @override
   List<Object?> get props => [items, product, isAdded, isRemoved, totalPrice];
-
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -43,8 +46,7 @@ class CartLoaded extends CartState {
       map['isAdded'],
       map['isRemoved'],
       ProductModel.fromMap(map['product']),
-      map['totalPrice']
+      map['totalPrice'],
     );
   }
 }
-

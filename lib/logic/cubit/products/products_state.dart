@@ -12,5 +12,3 @@ class ProductLoaded extends ProductsState {
   final List<ProductModel> products;
   ProductLoaded(this.products);
 }
-
-
